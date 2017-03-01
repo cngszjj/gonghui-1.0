@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jk</title>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDSuYyou2ztTkmkTkknPATzLsk9vcyRgwk&sensor=false"></script>
+	<script src="script/ajax.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/loading.css">
+	<script type="text/javascript" src="script/jquery.min.js"></script>
+	<script type="text/javascript" src="script/main.js"></script>
+<style type="text/css">
+html {height:100%; font-family: "Microsoft YaHei","Helvetica", "Tahoma, Arial", "sans-serif" ! important;}
+ body {height:100%;margin:0;padding:0}
+#googleMap {height:100%}
+#pane{ display: block;}
+#widget-pane{
+background: #ddd url(images/bg.jpg) repeat top left; z-index: 3;
+	width: 408px;
+    position: absolute;
+    top: 0;
+    z-index: 3;
+    opacity: 1;
+    height: 0;
+    left: 0;
+    height: 100%;
+   -webkit-transform: translateX(-408px);
+    transform: translateX(-408px);
+    transition-property: -webkit-transform,transform,opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.42, 0, 0.41, 0.94)
+}
+
+#pane .widget-pane-visible {
+    opacity: 1;
+    height: 100%;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#pane .widget-pane .wide-pane-content{
+	z-index:3;
+	display: block;
+	
+	position: absolute;
+	left: 0;
+	top:0;
+	width: 100%;
+	height: 100%;
+	display:block;
+}
+.wide-pane-header{
+	position: absolute;
+	width: 408px;
+	height: 300px;
+	top: 0;
+	left: 0;
+}
+.track_id{
+	position: absolute;
+	width: 408px;
+	height: 100px;
+	top: 100px;
+	left: 0;
+	font-size: 60px;
+	line-height: 100px;
+	text-align: center;
+	font-weight: 600;
+	color:white;
+}
+.wide-pane-info{
+	position: absolute;
+	width: 408px;
+	height: 200px;
+	top:300px;
+	background: #4285F4;
+}
+.wide-pane-info .track{
+	width: 400px;
+	padding:4px;
+	height: 42px;
+	line-height: 42px;
+	font-size: 16px;
+	color:white;
+}
+#updatetime{
+	width:400px;
+	height:42px;
+	line-height: 42px;
+	text-align: center;
+	font-size:18px;
+	
+}
+.wide-pane-info .track span{
+	display: block;
+	width: 100px;
+	height: 42px;
+	text-align: center;
+	font-size: 20px;
+	line-height: 42px;
+	float: left;
+	color:#000;
+}
+.wide-pane-operate{
+
+	display: block;
+	position: absolute;
+	width: 408px;
+	height: 100px;
+	top:500px;
+	border-bottom: 1px solid #fff;	
+}
+.wide-pane-operate .soundswitch{
+	position: absolute;
+	width: 204px;
+	height: 40px;
+	left: 204px;
+	top: 20px;
+}
+.wide-pane-operate .soundtext{
+	position: absolute;
+	width: 204px;
+	height: 40px;
+	left: 0px;
+	top: 20px;
+	line-height: 40px;
+	text-align: center;
+	font-size: 36px;
+	font-weight: 700;
+	color: rgba(0,0,0,0.6);
+}
+.wide-pane-operate .resetswitch{
+	position: absolute;
+	width: 204px;
+	height: 40px;
+	left: 204px;
+	top: 120px;
+}
+.wide-pane-operate .resettext{
+	color: rgba(0,0,0,0.6);
+	position: absolute;
+	width: 204px;
+	height: 40px;
+	left: 0px;
+	top: 120px;
+	line-height: 40px;
+	text-align: center;
+	font-size: 36px;
+	font-weight: 700;
+}
+#widget-pane-button{
+	position: absolute;
+	top: 8px;
+	left: 100%;
+	width: 23px;
+    height: 48px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.9) url("images/button.png") 7px center/7px 10px no-repeat;
+    box-shadow: 0px 1px 4px rgba(0,0,0,0.3);
+}
+#colorfulPulse{
+	position:absolute;
+	width:140px;
+	height:100px;
+	top:50%;
+	left:50%;
+	margin-left:-70px;
+	padding:0;
+	
+	z-index:3;
+}
+#loading_info{
+	position:absolute;
+	width:140px;
+	height:100px;
+	top:50%;
+	left:50%;
+	margin-left:-70px;
+	padding:0;
+	line-height:100px;
+	text-align:center;
+	font-size:20px;
+	color:white;
+	z-index:3;
+	display:none;
+	
+}
+#loading_div{
+	background:rgba(255,255,255,0.2);
+	position:absolute;
+	width:408px;
+	height:100%;
+	z-index:3;
+	display:none;
+}
+#power_icon{
+	position:absolute;
+	width:51px;
+	height:23px;
+	right: 2px;
+	bottom: 2px;
+	
+}
+.power_icon_1{
+	background: url("images/power-51-47.png") no-repeat 0 0;
+}
+.power_icon_0{
+	background: url("images/power-51-47.png") no-repeat 0 -24px;
+}
+
+</style>
+</head>
+<body>
+<div id="googleMap" ></div>
+<div id="pane">
+	
+	<div id="widget-pane" class="widget-pane widget-pane-visible">
+		<div	 id="power_icon" class="power_icon_0"></div>
+		<div class="wide-pane-content">
+			<img src="images/header1.jpg" class="wide-pane-header">
+			<div class="track_id" id="track_id">114</div>
+			<div class="wide-pane-info">
+				<div class="track">
+					<span>站点1</span>
+					<div id="track1_info">接近上接近点 放上从上而下</div>
+
+				</div>
+				<div class="track">
+					<span>站点2</span>
+					<div id="track2_info">接近上接近点 放上从上而下</div>
+				</div>
+				<div class="track">
+					<div class="updatetime" id="updatetime"></div>
+				</div>
+			</div>
+			<div class="wide-pane-operate">
+				<div class="sound">
+					<div class="soundtext">
+						声音
+					</div>
+					<div class="soundswitch">
+						<div class="switch demo3">
+							<input type="checkbox" id="sound_box">
+							<label><i></i></label>
+						</div>
+					</div>
+				</div>
+				<div class="sound">
+					<div class="resettext">
+						复位
+					</div>
+					<div class="resetswitch">
+						<div class="switch demo1">
+							<input type="checkbox"  id="reset_box">
+							<label><i></i></label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="widget-pane-button">
+		</div>
+	<div id="loading_div">
+		<div id="colorfulPulse">
+		  <span class="item-1"></span>
+		  <span class="item-2"></span>
+		  <span class="item-3"></span>
+		  <span class="item-4"></span>
+		  <span class="item-5"></span>
+		  <span class="item-6"></span>
+		  <span class="item-7"></span>
+		</div>
+		<div id="loading_info"></div>
+	</div>
+</div>
+
+
+</div>
+
+</body>
+</html>

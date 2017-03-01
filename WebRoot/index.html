@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jk</title>
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDSuYyou2ztTkmkTkknPATzLsk9vcyRgwk&sensor=false"></script>
+	<script src="script/ajax.js"></script>
+<script>
+var json = null;
+	ajax('test.json?time=123',function(str){
+		json = eval(str);
+		});
+
+var myCenter = new google.maps.LatLng(7.3006675,80.6339817);
+function initialize()
+{
+
+	var mapProp = {
+	  center:myCenter,
+	  zoom:14,
+	  mapTypeId:google.maps.MapTypeId.ROADMAP
+	  };
+	var map=new google.maps.Map(document.getElementById("googleMap")
+	  ,mapProp);
+	for(var i=0;i<json.length;i++){
+		 (function(){   
+			 var p = i  ;
+		 	var marker = new google.maps.Marker({
+			position:new google.maps.LatLng(json[i].n,json[i].e),
+			draggable:true,
+			icon:'images/001.gif'
+			});
+			marker.setMap(map); 
+		     var infowindow = new google.maps.InfoWindow({
+	    		content:json[p].info
+	 		 }); 
+		   google.maps.event.addListener(marker,'mouseover',function(){
+				infowindow.open(map,marker);
+			});	
+			google.maps.event.addListener(marker,'mouseout',function(){
+				infowindow.close(map,marker);
+			});	 
+		  })(); 
+	}
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
+	function cli(){
+		var date = new Date();
+
+		ajax('test.json?time='+date.getTime(),function(str){
+		json = eval(str);
+		});
+		google.maps.event.addDomListener(window, 'load', initialize);
+	}
+	
+	 // setInterval(cli, 5000);
+	
+</script>
+<style type="text/css">
+html {height:100%}
+body {height:100%;margin:0;padding:0}
+#googleMap {height:100%}
+</style>
+</head>
+
+<body>
+<div id="googleMap" ></div>
+<!-- <input type="button" value="dddd" id="btu" class="zindex:10"> -->
+
+</body>
+</html>
